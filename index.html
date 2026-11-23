@@ -1,0 +1,453 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><style>body{margin:0;font:14px system-ui}img{max-width:100%}[hidden]{display:none!important}</style>
+<title>AnnoTinder now and next</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: a single reading column; screenshots break out wider; phone shots run in a scrollable strip like a coder's path. */
+:root{
+  --bg:#f5f7f8; --panel:#ffffff; --ink:#15212b; --muted:#5a6b78; --line:#d9e1e6;
+  --research:#0f6f73; --research-soft:#dcefef; --coder:#b5541c; --coder-soft:#f8e6da; --api:#4b4fa8; --api-soft:#e4e5f6;
+  --shadow:0 1px 2px rgba(21,33,43,.06),0 8px 24px rgba(21,33,43,.08);
+  --f-display:"Bricolage Grotesque",ui-sans-serif,system-ui,sans-serif;
+  --f-body:"IBM Plex Sans",ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif;
+  --f-mono:"IBM Plex Mono",ui-monospace,SFMono-Regular,Menlo,monospace;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#10171c; --panel:#18222a; --ink:#e6edf1; --muted:#9aabb7; --line:#2a3842;
+  --research:#5cc2c4; --research-soft:#183538; --coder:#f0975f; --coder-soft:#3a2518; --api:#a3a6f0; --api-soft:#25264a;
+  --shadow:0 1px 2px rgba(0,0,0,.4),0 8px 24px rgba(0,0,0,.35); color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#10171c; --panel:#18222a; --ink:#e6edf1; --muted:#9aabb7; --line:#2a3842;
+  --research:#5cc2c4; --research-soft:#183538; --coder:#f0975f; --coder-soft:#3a2518; --api:#a3a6f0; --api-soft:#25264a;
+  --shadow:0 1px 2px rgba(0,0,0,.4),0 8px 24px rgba(0,0,0,.35); color-scheme:dark}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font-family:var(--f-body);font-size:16px;line-height:1.6;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:0 64px}
+.wrap{max-width:1120px;margin:0 auto}
+.col{max-width:700px}
+h1,h2,h3{font-family:var(--f-display);line-height:1.15;text-wrap:balance;margin:0}
+h1{font-size:clamp(2rem,5vw,3rem);letter-spacing:-.01em}
+h2{font-size:1.75rem;margin-top:8px}
+h3{font-size:1.2rem}
+p{margin:0}
+.lede{font-size:1.125rem;color:var(--muted);margin-top:12px}
+header{padding-block:48px 24px;display:grid;gap:8px}
+.eyebrow{font-family:var(--f-mono);font-size:.78rem;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.meta{font-family:var(--f-mono);font-size:.8rem;color:var(--muted);margin-top:12px}
+code{font-family:var(--f-mono);font-size:.88em;background:var(--panel);border:1px solid var(--line);border-radius:4px;padding:0 4px}
+section{padding-block:40px;border-top:1px solid var(--line);display:grid;gap:20px}
+.tag{display:inline-block;font-family:var(--f-mono);font-size:.75rem;font-weight:500;padding:2px 8px;border-radius:999px;letter-spacing:.04em}
+.tag.r{background:var(--research-soft);color:var(--research)}
+.tag.c{background:var(--coder-soft);color:var(--coder)}
+.tag.a{background:var(--api-soft);color:var(--api)}
+/* diagram */
+.diagram{overflow-x:auto;background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:16px}
+.diagram svg{display:block;min-width:820px;width:100%;height:auto}
+.diagram text{font-family:var(--f-body);fill:var(--ink)}
+.diagram .small{font-size:12px;fill:var(--muted)}
+.diagram .mono{font-family:var(--f-mono);font-size:11.5px;fill:var(--muted)}
+/* step list */
+.steps{display:grid;gap:40px;counter-reset:step}
+.step{display:grid;gap:12px}
+.step-head{display:flex;gap:12px;align-items:baseline;flex-wrap:wrap}
+.step-head .n{font-family:var(--f-mono);font-size:.85rem;color:var(--research);font-weight:500;min-width:2ch}
+.step p{max-width:700px;color:var(--ink)}
+.step .route{font-family:var(--f-mono);font-size:.8rem;color:var(--muted)}
+figure{margin:0}
+.shot{display:block;width:100%;border:1px solid var(--line);border-radius:8px;box-shadow:var(--shadow);cursor:zoom-in;background:var(--panel)}
+.pair{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.pair>*{min-width:0}
+figcaption{font-size:.85rem;color:var(--muted);margin-top:6px}
+/* phone strip */
+.strip{display:flex;gap:20px;overflow-x:auto;padding:8px 4px 16px;scroll-snap-type:x mandatory}
+.phone{flex:0 0 230px;scroll-snap-align:start;display:grid;gap:8px;align-content:start}
+.phone .frame{border:8px solid #1d262d;border-radius:28px;overflow:hidden;background:#1d262d;box-shadow:var(--shadow)}
+.phone img{display:block;width:100%;cursor:zoom-in}
+.phone .n{font-family:var(--f-mono);font-size:.8rem;color:var(--coder);font-weight:500}
+.phone p{font-size:.88rem;color:var(--muted);line-height:1.45}
+.phone b{color:var(--ink);font-weight:600}
+/* callouts */
+.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.grid3>div{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:16px;display:grid;gap:6px;align-content:start;min-width:0}
+.grid3 p{font-size:.92rem;color:var(--muted)}
+.note{font-size:.9rem;color:var(--muted);max-width:700px}
+ul.plain{margin:0;padding-left:1.2em;display:grid;gap:6px;max-width:700px}
+dialog{border:none;padding:0;background:transparent;max-width:96vw;max-height:94vh}
+dialog::backdrop{background:rgba(10,15,20,.82)}
+dialog img{display:block;max-width:96vw;max-height:94vh;border-radius:8px}
+@media (max-width:760px){.pair,.grid3{grid-template-columns:1fr}}
+:focus-visible{outline:2px solid var(--research);outline-offset:2px}
+@media (prefers-reduced-motion:reduce){*{scroll-behavior:auto}}
+
+.ba{display:grid;grid-template-columns:1fr 1fr;gap:20px;align-items:start}
+.ba>*{min-width:0}
+.ba.narrow{max-width:640px}
+.lab{display:inline-block;font-family:var(--f-mono);font-size:.75rem;font-weight:500;letter-spacing:.06em;text-transform:uppercase;padding:2px 8px;border-radius:999px;margin-bottom:8px}
+.lab.now{background:var(--line);color:var(--muted)}
+.lab.new{background:var(--research-soft);color:var(--research)}
+.lab.will{background:var(--api-soft);color:var(--api)}
+.lab.can{background:var(--coder-soft);color:var(--coder)}
+.item{display:grid;gap:10px}
+.item h3{margin-top:8px}
+.item p{max-width:720px}
+.items{display:grid;gap:36px}
+nav.toc{display:flex;flex-wrap:wrap;gap:8px}
+nav.toc a{font-size:.9rem;text-decoration:none;color:var(--ink);border:1px solid var(--line);background:var(--panel);border-radius:999px;padding:4px 12px}
+nav.toc a:hover{border-color:var(--research)}
+.legend{display:flex;flex-wrap:wrap;gap:14px;font-size:.9rem;color:var(--muted);align-items:center}
+/* step strips */
+.flow{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+.flow>div{min-width:0;background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:16px;display:grid;gap:10px;align-content:start}
+.flow ol{margin:0;padding:0;list-style:none;display:grid;gap:8px;counter-reset:s}
+.flow li{counter-increment:s;display:grid;grid-template-columns:26px 1fr;gap:10px;align-items:start;font-size:.93rem;line-height:1.45}
+.flow li::before{content:counter(s);font-family:var(--f-mono);font-size:.78rem;font-weight:500;width:24px;height:24px;border-radius:999px;display:inline-flex;align-items:center;justify-content:center;background:var(--line);color:var(--ink)}
+.flow .hand li.m::before{background:var(--coder-soft);color:var(--coder)}
+.flow .auto li.a::before{background:var(--research-soft);color:var(--research)}
+.flow small{color:var(--muted);font-size:.85rem}
+.who{font-family:var(--f-mono);font-size:.72rem;color:var(--muted);display:block;grid-column:2}
+.flow>div>.lab{justify-self:start;margin-bottom:0}
+a{color:var(--research)}
+/* wireframes */
+.wires{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+.wires>figure{min-width:0}
+.wf{border:1.5px dashed var(--muted);border-radius:10px;background:var(--panel);padding:14px;font-size:.86rem;display:grid;gap:10px;align-content:start;min-height:230px}
+.wf .bar{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.wf .logo{font-family:var(--f-display);font-weight:700}
+.wf .in{flex:1;min-width:120px;border:1px solid var(--line);border-radius:6px;padding:4px 8px;color:var(--muted);background:var(--bg)}
+.wf .btn{border-radius:6px;padding:4px 10px;font-weight:600;font-size:.82rem;white-space:nowrap}
+.wf .btn.p{background:var(--api);color:var(--panel)}
+.wf .btn.s{border:1px solid var(--line)}
+.wf .row{display:grid;grid-template-columns:1fr auto;gap:8px;border-top:1px solid var(--line);padding-top:6px;align-items:center}
+.wf .row span:last-child{color:var(--muted);font-family:var(--f-mono);font-size:.75rem}
+.wf .f{display:grid;grid-template-columns:110px 1fr;gap:8px;align-items:center}
+.wf .f>span:first-child{color:var(--muted)}
+.wf .chip{display:inline-block;border:1px solid var(--line);border-radius:999px;padding:1px 8px;margin:1px 2px 1px 0;font-size:.78rem}
+.wf .chip.on{background:var(--api-soft);border-color:var(--api);color:var(--api)}
+.wf .prog{height:6px;border-radius:99px;background:var(--line);overflow:hidden}
+.wf .prog i{display:block;height:100%;background:var(--research)}
+.wf .prov{font-family:var(--f-mono);font-size:.74rem;color:var(--muted)}
+.tl td,.tl th{padding:6px 10px;border-top:1px solid var(--line);text-align:left;font-size:.9rem;vertical-align:top}
+.tl{border-collapse:collapse;width:100%;max-width:900px}
+.tl th{font-family:var(--f-mono);font-size:.75rem;font-weight:500;color:var(--muted);border-top:none}
+.scroll{overflow-x:auto}
+@media (max-width:760px){.ba,.flow,.wires{grid-template-columns:1fr}}
+</style></head><body>
+<div class="wrap">
+<header>
+  <span class="eyebrow">AnnoTinder · visual guide to the improvement plan</span>
+  <h1>AnnoTinder now, and after the plan</h1>
+  <p class="lede col">For each part of the improvement plan, this page shows how AnnoTinder works today and how it would work afterwards. "Now" pictures are real screenshots. "After" pictures are mockups or sketches, with nothing built yet.</p>
+  <div class="legend">
+    <span><span class="lab now">Now</span> real screenshot, repo main, 20 Nov 2026</span>
+    <span><span class="lab will">Will</span> OPTIMA commitment (Task 2)</span>
+    <span><span class="lab can">Can</span> proposal, not agreed yet</span>
+  </div>
+  <nav class="toc" aria-label="Sections">
+    <a href="#today">Today</a><a href="#picture">Big picture</a><a href="#p1">1 Easier screens</a><a href="#p2">2 AmCAT integration</a><a href="#p3">3 Data quality</a><a href="#p4">4 Machine coders</a>
+  </nav>
+</header>
+
+<section id="today">
+  <span class="eyebrow">Today</span>
+  <h2>How AnnoTinder works now</h2>
+  <p class="col">A researcher builds a study and shares a link. Coders open the link and answer questions about each unit. The server hands out the units, checks the answers and stores them.</p>
+  <div class="flow">
+    <div><h3><span class="tag r">researcher</span> six steps</h3>
+      <ol><li>Log in and create a study</li><li>Write the questions in the editor</li><li>Upload the units as a CSV table</li><li>Deploy and copy the link</li><li>Watch progress on the Overview</li><li>Download the results as a zip of CSV files</li></ol></div>
+    <div><h3><span class="tag c">coder</span> three steps</h3>
+      <ol><li>Open the link, usually on a phone. No account needed</li><li>Answer one question at a time: buttons, scales, dropdowns, swipes</li><li>Get the next unit until done. Stop and continue later if needed</li></ol>
+      <small>The server decides which unit comes next, for example so that each article is coded by three people.</small></div>
+  </div>
+  <div class="ba">
+    <figure><img class="shot" src="img/r_editor_item.jpg" alt="The editor" loading="lazy"><figcaption>The editor: the question tree on the left, one question on the right</figcaption></figure>
+    <figure><img class="shot" src="img/r_overview.jpg" alt="The overview" loading="lazy"><figcaption>The Overview: status, counts and progress of one study</figcaption></figure>
+  </div>
+  <div class="strip" tabindex="0" aria-label="Coder screens">
+    <div class="phone"><div class="frame"><img src="img/c03_ordinal.jpg" alt="Ordered options question" loading="lazy"></div><p>A question about the coder</p></div>
+    <div class="phone"><div class="frame"><img src="img/c05_scale.jpg" alt="Scale question" loading="lazy"></div><p>A scale with several rows</p></div>
+    <div class="phone"><div class="frame"><img src="img/c06_swipe.jpg" alt="Swipe question on a news item" loading="lazy"></div><p>A unit with a swipe question</p></div>
+  </div>
+  <p class="note">All 17 current screens are in the <a href="https://claude.ai/artifact/SVcaNpPZQJkVcFEc87FVyM">AnnoTinder screen tour</a>.</p>
+</section>
+
+<section id="picture">
+  <span class="eyebrow">Big picture</span>
+  <h2>What changes around AnnoTinder</h2>
+  <p class="col">Today AnnoTinder and AmCAT are two separate systems, and a person carries files between them. After the plan they are connected, share one login, and machine coders work next to the human ones.</p>
+  <div class="flow">
+    <div><span class="lab now">Now</span>
+      <div class="scroll"><svg viewBox="0 0 470 300" style="width:100%;min-width:420px;height:auto" role="img" aria-label="Now: AmCAT and AnnoTinder are separate, with files carried by hand and two logins"><defs><marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" style="fill:var(--muted)"/></marker></defs>
+        <g font-family="IBM Plex Sans, sans-serif" font-size="13">
+        <rect x="10" y="20" width="170" height="80" rx="10" style="fill:var(--api-soft);stroke:var(--api)"/><text x="26" y="48" font-weight="600" font-size="15" style="fill:var(--ink)">AmCAT</text><text x="26" y="68" style="fill:var(--muted)">documents, search</text><text x="26" y="86" style="fill:var(--muted)">login: MiddleCat</text>
+        <rect x="290" y="20" width="170" height="80" rx="10" style="fill:var(--research-soft);stroke:var(--research)"/><text x="306" y="48" font-weight="600" font-size="15" style="fill:var(--ink)">AnnoTinder</text><text x="306" y="68" style="fill:var(--muted)">studies, answers</text><text x="306" y="86" style="fill:var(--muted)">login: Keycloak</text>
+        <rect x="150" y="150" width="170" height="60" rx="10" style="fill:var(--panel);stroke:var(--muted);stroke-dasharray:5 4"/><text x="166" y="176" font-weight="600" style="fill:var(--ink)">Researcher, by hand</text><text x="166" y="195" style="fill:var(--muted)">CSV out, CSV in</text>
+        <path d="M95 100 C95 150 120 170 148 178" fill="none" stroke-width="1.5" stroke-dasharray="5 4" marker-end="url(#ar)" style="stroke:var(--muted)"/>
+        <path d="M322 178 C350 170 375 150 375 102" fill="none" stroke-width="1.5" stroke-dasharray="5 4" marker-end="url(#ar)" style="stroke:var(--muted)"/>
+        <rect x="290" y="240" width="170" height="44" rx="10" style="fill:var(--coder-soft);stroke:var(--coder)"/><text x="306" y="267" font-weight="600" style="fill:var(--ink)">Human coders</text>
+        <line x1="375" y1="240" x2="375" y2="102" stroke-width="1.5" marker-end="url(#ar)" style="stroke:var(--coder)"/>
+        <text x="10" y="262" style="fill:var(--muted)">Two logins. Files carried</text><text x="10" y="280" style="fill:var(--muted)">between the systems.</text>
+        </g></svg></div></div>
+    <div><span class="lab new">After the plan</span>
+      <div class="scroll"><svg viewBox="0 0 470 300" style="width:100%;min-width:420px;height:auto" role="img" aria-label="After: AmCAT sends documents to AnnoTinder and gets answers back, with one login and machine coders"><defs><marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" style="fill:var(--muted)"/></marker></defs>
+        <g font-family="IBM Plex Sans, sans-serif" font-size="13">
+        <rect x="150" y="6" width="170" height="34" rx="17" style="fill:var(--panel);stroke:var(--ink)"/><text x="235" y="28" text-anchor="middle" font-weight="600" style="fill:var(--ink)">One login</text>
+        <line x1="190" y1="40" x2="120" y2="62" stroke-width="1.2" style="stroke:var(--muted)"/><line x1="280" y1="40" x2="350" y2="62" stroke-width="1.2" style="stroke:var(--muted)"/>
+        <rect x="10" y="64" width="170" height="80" rx="10" style="fill:var(--api-soft);stroke:var(--api)"/><text x="26" y="92" font-weight="600" font-size="15" style="fill:var(--ink)">AmCAT</text><text x="26" y="112" style="fill:var(--muted)">"Annotate these</text><text x="26" y="129" style="fill:var(--muted)">documents"</text>
+        <rect x="290" y="64" width="170" height="80" rx="10" style="fill:var(--research-soft);stroke:var(--research)"/><text x="306" y="92" font-weight="600" font-size="15" style="fill:var(--ink)">AnnoTinder</text><text x="306" y="112" style="fill:var(--muted)">studies, answers,</text><text x="306" y="129" style="fill:var(--muted)">quality scores</text>
+        <line x1="180" y1="90" x2="288" y2="90" stroke-width="1.6" marker-end="url(#ar)" style="stroke:var(--api)"/><text x="235" y="83" text-anchor="middle" font-size="12" style="fill:var(--muted)">documents</text>
+        <line x1="290" y1="122" x2="182" y2="122" stroke-width="1.6" marker-end="url(#ar)" style="stroke:var(--research)"/><text x="235" y="138" text-anchor="middle" font-size="12" style="fill:var(--muted)">answers</text>
+        <rect x="200" y="200" width="125" height="50" rx="10" style="fill:var(--coder-soft);stroke:var(--coder)"/><text x="262" y="230" text-anchor="middle" font-weight="600" style="fill:var(--ink)">Human coders</text>
+        <rect x="335" y="200" width="125" height="50" rx="10" style="fill:var(--panel);stroke:var(--ink)"/><text x="397" y="222" text-anchor="middle" font-weight="600" style="fill:var(--ink)">Machine coders</text><text x="397" y="240" text-anchor="middle" font-size="11.5" style="fill:var(--muted)">LLM, classifier</text>
+        <line x1="270" y1="200" x2="340" y2="146" stroke-width="1.5" marker-end="url(#ar)" style="stroke:var(--coder)"/><line x1="397" y1="200" x2="385" y2="146" stroke-width="1.5" marker-end="url(#ar)" style="stroke:var(--ink)"/>
+        <text x="10" y="222" style="fill:var(--muted)">Answers land on the</text><text x="10" y="240" style="fill:var(--muted)">AmCAT documents, with</text><text x="10" y="258" style="fill:var(--muted)">who or what gave them.</text>
+        </g></svg></div></div>
+  </div>
+</section>
+
+<section id="p1">
+  <span class="eyebrow">Phase 1 &nbsp;<span class="lab can">Can</span></span>
+  <h2>Easier screens</h2>
+  <p class="col">Phase 1 gives a new researcher a visible path through the app, and gives coders a clear sense of progress. Seven of its ten changes are shown here.</p>
+  <div class="items">
+    <div class="item"><h3>1.1 A "what to do next" checklist</h3><p>Now the five tabs look equally important. After: the Overview shows the six steps, ticks off what is done and offers the next action.</p><div class="ba ">
+    <figure><span class="lab now">Now</span><img class="shot" src="img/overview_now.jpg" alt="Overview now" loading="lazy"></figure>
+    <figure><span class="lab new">Proposed</span><img class="shot" src="img/overview_new.jpg" alt="Overview with checklist" loading="lazy"></figure>
+  </div></div>
+    <div class="item"><h3>1.2 and 1.3 A simpler editor, and "Share" instead of "Deploy"</h3><p>Now the editor shows every control at once, and Deploy is both a tab and a button. After: a question list and one "Publish changes" button. The rest sits under Advanced, and the tab is called Share.</p><div class="ba ">
+    <figure><span class="lab now">Now</span><img class="shot" src="img/editor_now.jpg" alt="Editor now" loading="lazy"></figure>
+    <figure><span class="lab new">Proposed</span><img class="shot" src="img/editor_new.jpg" alt="Simpler editor" loading="lazy"></figure>
+  </div></div>
+    <div class="item"><h3>1.4 Links you can manage where they are listed</h3><p>Now links are set up in the editor under "Session", and the three actions are icons without text. After: a "New link" button and labelled actions.</p><div class="ba ">
+    <figure><span class="lab now">Now</span><img class="shot" src="img/links_now.jpg" alt="Links page now" loading="lazy"></figure>
+    <figure><span class="lab new">Proposed</span><img class="shot" src="img/links_new.jpg" alt="Links page with New link button and labelled actions" loading="lazy"></figure>
+  </div></div>
+    <div class="item"><h3>1.5 Study cards that show status</h3><p>Now a card shows a name and a date. After: live or paused, coders, answers and progress, without opening the study.</p><div class="ba ">
+    <figure><span class="lab now">Now</span><img class="shot" src="img/studies_now.jpg" alt="Studies list now" loading="lazy"></figure>
+    <figure><span class="lab new">Proposed</span><img class="shot" src="img/studies_new.jpg" alt="Study card with status and progress" loading="lazy"></figure>
+  </div></div>
+    <div class="item"><h3>1.7 A coder top bar that shows progress</h3><p>Now there are six icon buttons and a counter that reads "1 · 2". After: "Article 1 of 3, Question 2 of 6" with a progress bar. The other controls move into the menu.</p><div class="ba narrow">
+    <figure><span class="lab now">Now</span><img class="shot" src="img/coder_now.jpg" alt="Coder top bar now" loading="lazy"></figure>
+    <figure><span class="lab new">Proposed</span><img class="shot" src="img/coder_new.jpg" alt="Coder top bar with progress" loading="lazy"></figure>
+  </div></div>
+    <div class="item"><h3>1.8 and 1.9 A start screen that sets expectations, in the coder's language</h3><p>Now the first screen is the consent text only. After: how long it takes, how many units, that you can pause, and a language choice for the fixed text.</p><div class="ba narrow">
+    <figure><span class="lab now">Now</span><img class="shot" src="img/start_now.jpg" alt="Start screen now" loading="lazy"></figure>
+    <figure><span class="lab new">Proposed</span><img class="shot" src="img/start_new.jpg" alt="Start screen with time estimate and language choice" loading="lazy"></figure>
+  </div></div>
+  </div>
+  <p class="note">Not pictured: 1.6 one word per thing (question, unit, publish, coder, design) and 1.10 a search box for the help topics.</p>
+</section>
+
+<section id="p2">
+  <span class="eyebrow">Phase 2 &nbsp;<span class="lab will">Will</span></span>
+  <h2>AmCAT integration</h2>
+  <p class="col">Phase 2 is OPTIMA Task 2. An AmCAT user starts an annotation job from a set of documents, and the answers come back onto those documents, with one login.</p>
+
+  <h3>The researcher's work, step by step</h3>
+  <div class="flow">
+    <div class="hand"><span class="lab now">Now: 9 steps, 6 by hand</span>
+      <ol>
+        <li class="m">Search in AmCAT and export the documents as CSV<span class="who">by hand</span></li>
+        <li class="m">Log in to AnnoTinder with a second account<span class="who">by hand</span></li>
+        <li>Create a study and write the questions</li>
+        <li class="m">Upload the CSV as units<span class="who">by hand</span></li>
+        <li>Deploy and share the link with coders</li>
+        <li>Coders work</li>
+        <li class="m">Download the results zip<span class="who">by hand</span></li>
+        <li class="m">Match the answers to the AmCAT documents by id<span class="who">by hand</span></li>
+        <li class="m">Upload the answers into AmCAT as new fields<span class="who">by hand</span></li>
+      </ol></div>
+    <div class="auto"><span class="lab will">After: 4 steps, none by hand</span>
+      <ol>
+        <li>Search in AmCAT and click "Annotate these documents"</li>
+        <li>Choose the questions (a template or your own design) and share the link with coders</li>
+        <li>Coders work</li>
+        <li class="a">The answers appear on the documents in AmCAT<span class="who">automatic, with who coded what and when</span></li>
+      </ol>
+      <small>AmCAT creates the study, sends the documents, and fetches the answers through AnnoTinder's researcher API.</small></div>
+  </div>
+
+  <h3>One login instead of two</h3>
+  <div class="flow">
+    <div><span class="lab now">Now</span><p>AmCAT users log in through <b>MiddleCat</b>. AnnoTinder researchers log in through <b>Keycloak</b>. The same person has two separate accounts, and neither system knows they are the same.</p></div>
+    <div><span class="lab will">After</span><p>One login opens both. Which way is still open: both systems use one provider, or one accepts the other's logins. <b>This is the first decision to take.</b></p></div>
+  </div>
+
+  <h3>How the answers travel back</h3>
+  <div class="flow">
+    <div><span class="lab will">First version: asking on a timer</span>
+      <div class="scroll"><svg viewBox="0 0 460 150" style="width:100%;min-width:400px;height:auto" role="img" aria-label="Polling timeline: AmCAT asks every 5 minutes; most answers are no">
+        <g font-family="IBM Plex Sans, sans-serif" font-size="12">
+        <line x1="20" y1="70" x2="440" y2="70" stroke-width="1.5" style="stroke:var(--line)"/>
+        <line x1="50" y1="52" x2="50" y2="70" stroke-width="1.5" style="stroke:var(--muted)"/><text x="50" y="44" text-anchor="middle" style="fill:var(--muted)">9:05</text><text x="50" y="92" text-anchor="middle" font-weight="600" style="fill:var(--muted)">no</text><line x1="140" y1="52" x2="140" y2="70" stroke-width="1.5" style="stroke:var(--muted)"/><text x="140" y="44" text-anchor="middle" style="fill:var(--muted)">9:10</text><text x="140" y="92" text-anchor="middle" font-weight="600" style="fill:var(--muted)">no</text><line x1="230" y1="52" x2="230" y2="70" stroke-width="1.5" style="stroke:var(--muted)"/><text x="230" y="44" text-anchor="middle" style="fill:var(--muted)">9:15</text><text x="230" y="92" text-anchor="middle" font-weight="600" style="fill:var(--muted)">no</text><line x1="320" y1="52" x2="320" y2="70" stroke-width="1.5" style="stroke:var(--muted)"/><text x="320" y="44" text-anchor="middle" style="fill:var(--muted)">9:20</text><text x="320" y="92" text-anchor="middle" font-weight="600" style="fill:var(--research)">12 new</text><line x1="410" y1="52" x2="410" y2="70" stroke-width="1.5" style="stroke:var(--muted)"/><text x="410" y="44" text-anchor="middle" style="fill:var(--muted)">9:25</text><text x="410" y="92" text-anchor="middle" font-weight="600" style="fill:var(--muted)">no</text>
+        <circle cx="266" cy="70" r="5" style="fill:var(--coder)"/><text x="266" y="118" text-anchor="middle" style="fill:var(--coder)">9:17 a coder answers</text>
+        <text x="20" y="142" style="fill:var(--muted)">AmCAT asks every 5 minutes. Answers arrive up to 5 minutes late.</text>
+        </g></svg></div></div>
+    <div><span class="lab can">Later: a webhook</span>
+      <div class="scroll"><svg viewBox="0 0 460 150" style="width:100%;min-width:400px;height:auto" role="img" aria-label="Webhook timeline: AnnoTinder sends the answers at once">
+        <g font-family="IBM Plex Sans, sans-serif" font-size="12">
+        <line x1="20" y1="70" x2="440" y2="70" stroke-width="1.5" style="stroke:var(--line)"/>
+        <circle cx="266" cy="70" r="5" style="fill:var(--coder)"/><text x="266" y="44" text-anchor="middle" style="fill:var(--coder)">9:17 a coder answers</text>
+        <line x1="266" y1="76" x2="266" y2="100" stroke-width="1.6" style="stroke:var(--research)"/><text x="266" y="116" text-anchor="middle" font-weight="600" style="fill:var(--research)">9:17 AnnoTinder sends 12 answers</text>
+        <text x="20" y="142" style="fill:var(--muted)">No questions asked. Nothing is sent until someone answers.</text>
+        </g></svg></div></div>
+  </div>
+
+  <h3>The new screens in AmCAT</h3>
+  <p class="col">These four are rough sketches of what the screens need to hold. AmCAT's real look will differ.</p>
+  <div class="wires">
+    <figure><div class="wf">
+      <div class="bar"><span class="logo">AmCAT</span><span class="in">climate AND (policy OR law)</span></div>
+      <div class="bar"><b>500 documents</b><span style="flex:1"></span><span class="btn s">Export</span><span class="btn p">Annotate these documents</span></div>
+      <div class="row"><span>Parliament votes on new climate law</span><span>2026-03-02</span></div>
+      <div class="row"><span>Farmers protest emission rules</span><span>2026-03-05</span></div>
+      <div class="row"><span>EU agrees 2040 target</span><span>2026-03-09</span></div>
+    </div><figcaption>1. A new button on a search result</figcaption></figure>
+    <figure><div class="wf">
+      <b>New annotation job</b>
+      <div class="f"><span>Show coders</span><span><span class="chip on">title</span><span class="chip on">text</span><span class="chip">date</span><span class="chip">source</span></span></div>
+      <div class="f"><span>Questions</span><span><span class="chip on">Tone: positive / neutral / negative</span><span class="chip">Yes / no swipe</span><span class="chip">My own design</span></span></div>
+      <div class="f"><span>Coders per document</span><span><span class="chip">1</span><span class="chip on">3</span><span class="chip">5</span></span></div>
+      <div class="f"><span>Save answer as</span><span class="in">tone</span></div>
+      <div class="bar"><span style="flex:1"></span><span class="btn s">Cancel</span><span class="btn p">Create job</span></div>
+    </div><figcaption>2. What to show, what to ask, how many coders</figcaption></figure>
+    <figure><div class="wf">
+      <b>Annotation jobs</b>
+      <div><div class="row" style="border-top:none"><span>Climate tone, 500 documents</span><span>live</span></div><div class="prog"><i style="width:62%"></i></div><span class="prov">310 of 500 complete · 3 coders · open in AnnoTinder</span></div>
+      <div><div class="row"><span>Is it news? 2,000 documents</span><span>done</span></div><div class="prog"><i style="width:100%"></i></div><span class="prov">2,000 of 2,000 · agreement 0.84</span></div>
+      <div><div class="row"><span>Actors pilot, 50 documents</span><span>paused</span></div><div class="prog"><i style="width:20%"></i></div><span class="prov">10 of 50 complete</span></div>
+    </div><figcaption>3. A job list with progress (D2.2)</figcaption></figure>
+    <figure><div class="wf">
+      <b>Parliament votes on new climate law</b>
+      <div class="f"><span>date</span><span>2026-03-02</span></div>
+      <div class="f"><span>source</span><span>De Volkskrant</span></div>
+      <div class="f"><span>tone</span><span><span class="chip on">negative</span> <span class="prov">agreed by 2 of 3 coders</span></span></div>
+      <div class="prov">coder #12 negative · coder #14 negative · coder #19 neutral<br>job "Climate tone" · design v2 · 2027-04-11</div>
+      <div class="f"><span>is_news</span><span><span class="chip on">yes</span> <span class="prov">3 of 3 coders</span></span></div>
+    </div><figcaption>4. Answers as fields on the document, with their origin</figcaption></figure>
+  </div>
+</section>
+
+<section id="p3">
+  <span class="eyebrow">Phase 3 &nbsp;<span class="lab can">Can</span></span>
+  <h2>Data quality</h2>
+  <p class="col">Phase 3 answers "can I trust this data?" inside the app. Now a researcher downloads the zip and works it out in R or Python. The numbers in the mockups are made up.</p>
+  <div class="items">
+    <div class="item"><h3>3.1 and 3.4 Agreement and a preview on the Results page</h3><p>Now Results is one download button. After: an agreement score per question, a warning where a question is unclear, and a few rows of the data.</p><div class="ba ">
+    <figure><span class="lab now">Now</span><img class="shot" src="img/results_now.jpg" alt="Results now: download only" loading="lazy"></figure>
+    <figure><span class="lab new">Proposed</span><img class="shot" src="img/results_new.jpg" alt="Results with data quality and preview" loading="lazy"></figure>
+  </div></div>
+    <div class="item"><h3>3.2 A quality score per coder</h3><p>Now the coder list shows counts and times. After: each coder's score against the answer key, and flags for very fast or repetitive answering. The first row shows a machine coder from Phase 4.</p><div class="ba ">
+    <figure><span class="lab now">Now</span><img class="shot" src="img/coders_now.jpg" alt="Coders list now" loading="lazy"></figure>
+    <figure><span class="lab new">Proposed</span><img class="shot" src="img/coders_new.jpg" alt="Coders list with quality column and a machine coder" loading="lazy"></figure>
+  </div></div>
+  </div>
+  <div class="flow">
+    <div><span class="lab now">Now</span><h3>Coders start straight away</h3><p>A new coder goes from the consent screen to real units. Mistakes made while learning end up in the data.</p></div>
+    <div><span class="lab can">3.3 After</span><h3>A practice round first</h3><ol><li>The coder gets a few practice units</li><li>After each answer they see the right one and why</li><li>Once they pass, the real units start</li></ol><small>Builds on the answer keys that already exist. The OPTIMA proposal asks for coder training.</small></div>
+  </div>
+  <p class="note">Not pictured: 3.5 an email when a study finishes or a link runs out.</p>
+</section>
+
+<section id="p4">
+  <span class="eyebrow">Phase 4 &nbsp;<span class="lab can">Can</span></span>
+  <h2>Machine coders</h2>
+  <p class="col">Now every answer comes from a person. After Phase 4 a model can answer the same questions, so a few hundred human-coded articles can become labels on a whole collection.</p>
+  <div class="diagram" role="img" aria-label="Loop: humans code a sample, a classifier is trained, it labels the rest, uncertain documents go back to humans. An LLM coder can answer without training.">
+    <svg viewBox="0 0 980 330" xmlns="http://www.w3.org/2000/svg"><defs><marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" style="fill:var(--muted)"/></marker></defs>
+      <rect x="20" y="40" width="200" height="90" rx="10" style="fill:var(--coder-soft);stroke:var(--coder)"/>
+      <text x="38" y="68" font-weight="600" font-size="15">1 Humans code a sample</text><text x="38" y="90" class="small">a few hundred articles,</text><text x="38" y="107" class="small">in AnnoTinder</text>
+      <rect x="290" y="40" width="200" height="90" rx="10" style="fill:var(--panel);stroke:var(--ink)"/>
+      <text x="308" y="68" font-weight="600" font-size="15">2 Train a classifier</text><text x="308" y="90" class="small">on those answers,</text><text x="308" y="107" class="small">one per question</text>
+      <rect x="560" y="40" width="200" height="90" rx="10" style="fill:var(--api-soft);stroke:var(--api)"/>
+      <text x="578" y="68" font-weight="600" font-size="15">3 Label the rest</text><text x="578" y="90" class="small">the whole collection in AmCAT,</text><text x="578" y="107" class="small">with a confidence per label</text>
+      <rect x="560" y="200" width="200" height="90" rx="10" style="fill:var(--panel);stroke:var(--line)"/>
+      <text x="578" y="228" font-weight="600" font-size="15">4 Find the unsure ones</text><text x="578" y="250" class="small">documents with the</text><text x="578" y="267" class="small">lowest confidence</text>
+      <line x1="220" y1="85" x2="288" y2="85" stroke-width="1.6" marker-end="url(#ar)" style="stroke:var(--muted)"/>
+      <line x1="490" y1="85" x2="558" y2="85" stroke-width="1.6" marker-end="url(#ar)" style="stroke:var(--muted)"/>
+      <line x1="660" y1="130" x2="660" y2="198" stroke-width="1.6" marker-end="url(#ar)" style="stroke:var(--muted)"/>
+      <path d="M560 245 C300 245 120 230 120 132" fill="none" stroke-width="1.6" marker-end="url(#ar)" style="stroke:var(--muted)"/>
+      <text x="250" y="262" class="small">back to the human coders</text>
+      <rect x="800" y="40" width="165" height="250" rx="10" style="fill:var(--bg);stroke:var(--line);stroke-dasharray:5 4"/>
+      <text x="816" y="68" font-weight="600" font-size="15">LLM coder</text>
+      <text x="816" y="92" class="small">Needs no training:</text><text x="816" y="109" class="small">it reads the codebook.</text>
+      <text x="816" y="138" class="small">Good for a quick first</text><text x="816" y="155" class="small">result and for new or</text><text x="816" y="172" class="small">open questions.</text>
+      <text x="816" y="201" class="small">Runs in-house by</text><text x="816" y="218" class="small">default, so restricted</text><text x="816" y="235" class="small">texts stay on our</text><text x="816" y="252" class="small">servers.</text>
+      <line x1="800" y1="85" x2="762" y2="85" stroke-width="1.6" marker-end="url(#ar)" style="stroke:var(--muted)"/>
+      <text x="20" y="315" class="small">Every machine answer records the model, its version and the prompt, next to the human answers it is compared with.</text>
+    </svg>
+  </div>
+  <div class="scroll"><table class="tl">
+    <tr><th></th><th>LLM coder</th><th>Trained classifier</th></tr>
+    <tr><td>Needs</td><td>The codebook text only</td><td>A few hundred human-coded examples per question</td></tr>
+    <tr><td>Best for</td><td>Quick first results, new or open questions</td><td>Labelling a large collection cheaply, the same way every time</td></tr>
+    <tr><td>Weak point</td><td>Slow and costly at scale; hosted models change over time</td><td>One model per question; fixed categories only</td></tr>
+  </table></div>
+
+  <h3>The LLM coder, screen by screen</h3>
+  <p class="col">An LLM coder needs no training data. The researcher adds it like a coder, tries it on a few units, and then decides how far to trust it.</p>
+  <div class="items">
+    <div class="item"><h3>A. Add a machine coder</h3><p>On the coders page, next to the human coders. The researcher picks the kind, where it runs, the model and which questions it answers. "This server" keeps restricted texts in-house. A trial on 5 units comes before anything else.</p>
+      <figure><span class="lab can">Mockup</span><img class="shot" src="img/llm_add.jpg" alt="Dialog: add a machine coder, with kind, where it runs, model, questions and a trial run" loading="lazy"></figure></div>
+    <div class="item"><h3>B. It appears in the coder list</h3><p>The machine coder is one more row, marked AI, with its model and prompt version. It gets the same quality score as everyone else.</p>
+      <figure><span class="lab can">Mockup</span><img class="shot" src="img/coders_new.jpg" alt="Coders list with a machine coder as the first row" loading="lazy"></figure></div>
+    <div class="item"><h3>C. Compare it with the human coders</h3><p>The key question is whether the model agrees with the coders as well as they agree with each other. The screen answers that per question, lists the units where they disagree with the model's reason, and offers the next step: let it code the rest, only some questions, or remove it.</p>
+      <figure><span class="lab can">Mockup</span><img class="shot" src="img/llm_compare.jpg" alt="Comparison of the machine coder with human coders per question, and a list of disagreements" loading="lazy"></figure></div>
+  </div>
+
+  <h3>The classifier, screen by screen</h3>
+  <p class="col">A classifier is for scale. It learns from the human answers to one question and then labels the whole AmCAT collection.</p>
+  <div class="items">
+    <div class="item"><h3>D. Train, test, then label the rest</h3><p>Four steps in one screen. The test shows how often the classifier gives the same answer as the coders on articles it never saw. The trial run shows how sure it is about the rest, before any label is saved.</p>
+      <figure><span class="lab can">Mockup</span><img class="shot" src="img/clf_scale.jpg" alt="Classifier screen: steps, test results per answer, and how sure it is about the remaining documents" loading="lazy"></figure></div>
+    <div class="item"><h3>E. Machine labels in AmCAT, and the unsure ones go back</h3><p>In AmCAT each label shows who or what gave it and how sure it was. Searches can leave machine labels out or set a minimum confidence. The least sure documents become a new job for the human coders, who see them like any other unit. Rough sketches again.</p>
+      <div class="wires">
+        <figure><div class="wf">
+          <b>Farmers protest emission rules</b>
+          <div class="f"><span>date</span><span>2026-03-05</span></div>
+          <div class="f"><span>tone</span><span><span class="chip on">negative</span> <span class="prov">machine · confidence 0.94</span></span></div>
+          <div class="prov">classifier tone-v1 · trained on 412 human-coded articles<br>job "Climate tone" · 2027-10-02</div>
+          <div class="f"><span>is_news</span><span><span class="chip on">yes</span> <span class="prov">human · 3 of 3 coders</span></span></div>
+        </div><figcaption>A document with a machine label and a human label</figcaption></figure>
+        <figure><div class="wf">
+          <div class="bar"><span class="logo">AmCAT</span><span class="in">tone: negative</span></div>
+          <div class="f"><span>Labels from</span><span><span class="chip on">humans</span><span class="chip on">machine</span></span></div>
+          <div class="f"><span>Machine at least</span><span><span class="chip">0.7</span><span class="chip on">0.8</span><span class="chip">0.9</span> <span class="prov">sure</span></span></div>
+          <div class="bar"><b>11,240 documents</b><span style="flex:1"></span><span class="prov">212 human · 11,028 machine</span></div>
+          <div class="row"><span>Farmers protest emission rules</span><span>0.94</span></div>
+          <div class="row"><span>Court halts permit for new plant</span><span>human</span></div>
+        </div><figcaption>Searching with or without machine labels</figcaption></figure>
+        <figure><div class="wf">
+          <b>Annotation jobs</b>
+          <div><div class="row" style="border-top:none"><span>Climate tone: 200 unsure documents</span><span>live</span></div><div class="prog"><i style="width:35%"></i></div><span class="prov">70 of 200 complete · made by classifier tone-v1 · confidence below 0.7</span></div>
+          <div><div class="row"><span>Climate tone, 500 documents</span><span>done</span></div><div class="prog"><i style="width:100%"></i></div><span class="prov">500 of 500 · training sample</span></div>
+          <div class="prov">When the 200 are coded, the classifier is trained again on 612 articles.</div>
+        </div><figcaption>The unsure documents as a new job for human coders</figcaption></figure>
+        <figure><div class="wf">
+          <b>What is saved with every machine answer</b>
+          <div class="f"><span>made by</span><span>classifier tone-v1, or llama3.3:70b</span></div>
+          <div class="f"><span>version</span><span>model file or model tag, prompt version</span></div>
+          <div class="f"><span>trained on</span><span>job and number of human answers</span></div>
+          <div class="f"><span>confidence</span><span>0 to 1</span></div>
+          <div class="f"><span>when</span><span>date and time</span></div>
+        </div><figcaption>The record that makes a machine label citable</figcaption></figure>
+      </div></div>
+  </div>
+</section>
+
+
+</div>
+
+<dialog id="lb" aria-label="Enlarged screenshot"><img id="lbimg" alt=""></dialog>
+<script>
+(function(){
+  var d=document.getElementById('lb'), im=document.getElementById('lbimg');
+  document.addEventListener('click',function(e){
+    var t=e.target;
+    if(t.tagName==='IMG' && (t.classList.contains('shot') || t.closest('.phone'))){ im.src=t.src; im.alt=t.alt; try{d.showModal();}catch(_){} }
+    else if(d.open && (t===d || t===im)){ d.close(); }
+  });
+  document.querySelectorAll('nav.toc a').forEach(function(a){ a.addEventListener('click',function(e){ var el=document.getElementById(a.getAttribute('href').slice(1)); if(el){ e.preventDefault(); el.scrollIntoView({behavior:'smooth'}); } }); });
+})();
+</script>
+</body></html>
